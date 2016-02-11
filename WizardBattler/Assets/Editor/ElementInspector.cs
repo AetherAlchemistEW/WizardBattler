@@ -64,5 +64,6 @@ public class ElementInspector : Editor
             ele.baseCreature = (GameObject)EditorGUILayout.ObjectField("Base Creature", ele.baseCreature, typeof(GameObject), false);
         }
         //base.OnInspectorGUI();
+        EditorUtility.SetDirty(target);
     }
 }

@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
             if(manaPool[i] < 5)
             {
                 manaPool[i]++;
+                manaUI[i].text = manaPool[i].ToString();
             }
         }
         isActive = true;
@@ -71,6 +72,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Summon()
     {
+        string name = "";
         //Get creature base from first (well, last) element 
         //Spawn prefab and assign to creature
         GameObject creature = (GameObject)Instantiate(combo[3].baseCreature, SumPoint, Quaternion.identity);
@@ -91,7 +93,7 @@ public class PlayerController : MonoBehaviour
 
         //add all cumulative values
         cc.eleMulti = new float[4];
-        for (int i = combo.Length - 1; i >= 0; i--)
+        for (int i = 0; i < combo.Length; i++)
         {
             cc.attackDamage += combo[i].attackDamage;
             cc.defence += combo[i].defence;
@@ -101,23 +103,109 @@ public class PlayerController : MonoBehaviour
             if (combo[i].name == "Air")//0
             {
                 cc.eleMulti[i] += 1;
+
+                if(i == 0)
+                {
+                    //combat
+                    name += "Ranged ";
+                }
+                else if(i == 1)
+                {
+                    //armour
+                    name += "Ethereal ";
+                }
+                else if (i == 2)
+                {
+                    //advantages/resistances
+                    name += "Airy ";
+                }
+                else if (i == 3)
+                {
+                    //shell
+                    name += "Angel";
+                }
             }
             else if (combo[i].name == "Earth")//1
             {
                 cc.eleMulti[i] += 1;
+
+                if (i == 0)
+                {
+                    //combat
+                    name += "Tanky ";
+                }
+                else if (i == 1)
+                {
+                    //armour
+                    name += "Bulletproof ";
+                }
+                else if (i == 2)
+                {
+                    //advantages/resistances
+                    name += "Earthen ";
+                }
+                else if (i == 3)
+                {
+                    //shell
+                    name += "Golem";
+                }
             }
             else if (combo[i].name == "Water")//2
             {
                 cc.eleMulti[i] += 1;
+
+                if (i == 0)
+                {
+                    //combat
+                    name += "Caster ";
+                }
+                else if (i == 1)
+                {
+                    //armour
+                    name += "Spellshielded ";
+                }
+                else if (i == 2)
+                {
+                    //advantages/resistances
+                    name += "Liquid ";
+                }
+                else if (i == 3)
+                {
+                    //shell
+                    name += "Mermidon";
+                }
             }
             else if (combo[i].name == "Fire")//3
             {
                 cc.eleMulti[i] += 1;
+
+                if (i == 0)
+                {
+                    //combat
+                    name += "Melee ";
+                }
+                else if (i == 1)
+                {
+                    //armour
+                    name += "Resistant ";
+                }
+                else if (i == 2)
+                {
+                    //advantages/resistances
+                    name += "Flaming ";
+                }
+                else if (i == 3)
+                {
+                    //shell
+                    name += "Demon";
+                }
             }  
         }
         //cColor = new Color(cColor.r / 4, cColor.g / 4, cColor.b / 4, 1);
         creature.GetComponent<Renderer>().material.color = cColor;
         creature.tag = gameObject.tag;
+        cc.Init();
+        creature.name = name;
 
         yield return null;
         gm.NextPhase();
@@ -127,5 +215,10 @@ public class PlayerController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(SumPoint, 1.0f);
+    }
+
+    public void Hit(int damage)
+    {
+        health -= damage;
     }
 }
